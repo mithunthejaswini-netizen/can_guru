@@ -60,8 +60,8 @@ class CAN:
     
     @dlc.setter
     def dlc(self, dlc):
-        if dlc < 0:
-            ValueError("DLC should be >0")
+        if dlc < 0 or dlc > 8:
+            ValueError("DLC should be > 0 and < 8")
         self._dlc = dlc
 
     @dir.setter
@@ -84,4 +84,14 @@ class CAN:
         if self.data != data:
             self.data = data
             
-            
+    def __str__(self):
+    
+        can_type = 'Extended-CAN :' if self.edl else 'Classic CAN :'
+        return (
+            f"{can_type}\n"
+            f"  can-id   = {hex(self._id)} dec={(self._id)}\n"
+            f"  can-dir  = {self._dir}\n"
+            f"  can-dlc  = {self._dlc}\n"
+            f"  can-brs  = {self._brs}\n"
+            f"  can-data = {self._data}\n"
+        )
