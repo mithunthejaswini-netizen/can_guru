@@ -1,8 +1,6 @@
-class CanStd:
+from utils.can_utils import DIR, BRS, CanType
+from can.can import CAN
+class CanStd(CAN):
     
     def __init__(self):
-        
-        
-    @brs.setter
-    def brs(self, brs):
-        raise  AttributeError('Brs is by default zero for std frame')
+        super().__init__()

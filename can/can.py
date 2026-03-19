@@ -1,12 +1,28 @@
-from utils.can_utils import DIR, BRS
+from utils.can_utils import IdentifierExtensionEnum as IDE
+from utils.can_utils import BitRateSwitchEnum as BRS
+from utils.can_utils import ExtendedDataLengthEnum as EDL
+from utils.can_utils import CanMsgDir as DIR
 
 class CAN:
-    def __init__(self, ):
-        self._id = 0
-        self._dlc = 0
-        self._data = tuple()
-        self._dir = ''
-        self._brs = 0 
+    def __init__(
+                self,
+                id,
+                dlc,
+                data,
+                *,
+                dir=DIR.TRANSMIT.value,
+                brs=BRS.SET.value,
+                ide=IDE.STANDARD_ID.value,
+                edl=EDL.CLASSIC_CAN.value 
+            ):
+        
+        self._id = id
+        self._dlc = dlc
+        self._data = data
+        self._dir = dir
+        self._brs = brs
+        self._ide = ide
+        self._edl = edl
 
     @property
     def id(self):
@@ -25,8 +41,16 @@ class CAN:
         return self._brs
     
     @property
+    def ide(self):
+        return self._ide
+    
+    @property
     def data(self):
         return self._data
+    
+    @property
+    def edl(self):
+        return self._edl
     
     @id.setter
     def id(self, id):
@@ -43,9 +67,21 @@ class CAN:
     @dir.setter
     def dir(self, dir):
         if dir in DIR:
-            self.dir = dir
+            self._dir = dir
+    
+    @edl.setter
+    def edl(self, edl):
+        if edl in EDL:
+            self._edl = edl
+            
+    @ide.setter
+    def ide(self, ide):
+        if ide in IDE:
+            self._ide = ide
     
     @data.setter
     def data(self, data):
         if self.data != data:
             self.data = data
+            
+            
