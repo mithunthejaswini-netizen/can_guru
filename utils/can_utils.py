@@ -13,7 +13,7 @@ class IdentifierExtensionEnum(IntEnum):
     EXTENDED_ID = 1
 class BitRateSwitchEnum(IntEnum):
     SET = 1
-    RESET = 0
+    NOTSET = 0
 class ExtendedDataLengthEnum(IntEnum):
     CLASSIC_CAN = 0
     FLEXIBLE_CAN = 1

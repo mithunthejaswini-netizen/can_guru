@@ -1,7 +1,7 @@
-from utils.can_utils import IdentifierExtensionEnum as IDE
-from utils.can_utils import BitRateSwitchEnum as BRS
-from utils.can_utils import ExtendedDataLengthEnum as EDL
-from utils.can_utils import CanMsgDir as DIR
+from ..utils.can_utils import IdentifierExtensionEnum as IDE
+from ..utils.can_utils import BitRateSwitchEnum as BRS
+from ..utils.can_utils import ExtendedDataLengthEnum as EDL
+from ..utils.can_utils import CanMsgDir as DIR
 
 class CAN:
     def __init__(
@@ -16,13 +16,13 @@ class CAN:
                 edl=EDL.CLASSIC_CAN.value 
             ):
         
-        self._id = id
-        self._dlc = dlc
-        self._data = data
-        self._dir = dir
-        self._brs = brs
-        self._ide = ide
-        self._edl = edl
+        self.id = id
+        self.dlc = dlc
+        self.data = data
+        self.dir = dir
+        self.brs = brs
+        self.ide = ide
+        self.edl = edl
 
     @property
     def id(self):
@@ -78,11 +78,19 @@ class CAN:
     def ide(self, ide):
         if ide in IDE:
             self._ide = ide
+            
+    @brs.setter
+    def brs(self, brs):
+        if brs in BRS:
+            self._brs = brs
     
     @data.setter
     def data(self, data):
-        if self.data != data:
-            self.data = data
+        print('setter isnot working')
+        if len(data) < self._dlc:
+            raise ValueError("Data length is less than DLC")
+            
+        self._data = data[:self._dlc]
             
     def __str__(self):
     
