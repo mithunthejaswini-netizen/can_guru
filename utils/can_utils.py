@@ -1,5 +1,8 @@
 from enum import IntEnum, StrEnum, auto
 
+class CAN_ID_RANGE(IntEnum):
+    STD_ID_MAX = 0x7FF
+    EXT_ID_MAX = 0x1FFFFFFF
 class CanFdDLC(IntEnum):
     CAN_FD_DLC_9  = 9
     CAN_FD_DLC_A  = auto()
@@ -14,7 +17,7 @@ class IdentifierExtensionEnum(IntEnum):
 class BitRateSwitchEnum(IntEnum):
     SET = 1
     NOTSET = 0
-class ExtendedDataLengthEnum(IntEnum):
+class FlexibleDataRateFormatEnum(IntEnum):
     CLASSIC_CAN = 0
     FLEXIBLE_CAN = 1
 class CanMsgDir(StrEnum):
@@ -30,4 +33,5 @@ CAN_FD_DLC_TABLE = {
                 CanFdDLC.CAN_FD_DLC_E.value : 48,
                 CanFdDLC.CAN_FD_DLC_F.value : 64
         }
+
 

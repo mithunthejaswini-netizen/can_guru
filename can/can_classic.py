@@ -1,3 +1,3 @@
 from .can import CAN
-class CanStd(CAN):
+class CanClassic(CAN):
     pass

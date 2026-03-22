@@ -1,7 +1,8 @@
 from ..utils.can_utils import IdentifierExtensionEnum as IDE
 from ..utils.can_utils import BitRateSwitchEnum as BRS
-from ..utils.can_utils import ExtendedDataLengthEnum as EDL
+from ..utils.can_utils import FlexibleDataRateFormatEnum as FDF
 from ..utils.can_utils import CanMsgDir as DIR
+from ..utils.can_utils import CAN_ID_RANGE
 
 class CAN:
     def __init__(
@@ -13,7 +14,7 @@ class CAN:
                 dir=DIR.TRANSMIT.value,
                 brs=BRS.SET.value,
                 ide=IDE.STANDARD_ID.value,
-                edl=EDL.CLASSIC_CAN.value 
+                fdf=FDF.CLASSIC_CAN.value 
             ):
         
         self.id = id
@@ -22,7 +23,7 @@ class CAN:
         self.dir = dir
         self.brs = brs
         self.ide = ide
-        self.edl = edl
+        self.fdf = fdf
 
     @property
     def id(self):
@@ -49,30 +50,41 @@ class CAN:
         return self._data
     
     @property
-    def edl(self):
-        return self._edl
+    def fdf(self):
+        return self._fdf
     
     @id.setter
     def id(self, id):
+        
+        print(hex(id))
         if id < 0:
-            ValueError("ID should be >0")
+            raise ValueError("ID should be >0")
+        
+        if id > CAN_ID_RANGE.EXT_ID_MAX.value:
+            raise ValueError("ID value should not exceed > 29bits")
+        
         self._id = id
     
     @dlc.setter
     def dlc(self, dlc):
+        
         if dlc < 0 or dlc > 8:
-            ValueError("DLC should be > 0 and < 8")
+            raise ValueError("DLC should be > 0 and < 8")
         self._dlc = dlc
 
     @dir.setter
     def dir(self, dir):
+        
         if dir in DIR:
             self._dir = dir
     
-    @edl.setter
-    def edl(self, edl):
-        if edl in EDL:
-            self._edl = edl
+    @fdf.setter
+    def fdf(self, fdf):
+        
+        if fdf in FDF:
+            if fdf != FDF.CLASSIC_CAN.value:
+                raise ValueError('FDF should be 0 for classic CAN')
+        self._fdf = fdf
             
     @ide.setter
     def ide(self, ide):
@@ -86,12 +98,19 @@ class CAN:
     
     @data.setter
     def data(self, data):
-        print('setter isnot working')
+
         if len(data) < self._dlc:
             raise ValueError("Data length is less than DLC")
             
         self._data = data[:self._dlc]
             
+    def isStd(self):
+        return self._id <= CAN_ID_RANGE.STD_ID_MAX.value
+    
+    def isExt(self):
+        return self._id > CAN_ID_RANGE.STD_ID_MAX.value and \
+            self._id <= CAN_ID_RANGE.EXT_ID_MAX.value
+    
     def __str__(self):
     
         can_type = 'Extended-CAN :' if self.edl else 'Classic CAN :'
