@@ -3,7 +3,6 @@ from ..utils.can_utils import BitRateSwitchEnum as BRS
 from ..utils.can_utils import FlexibleDataRateFormatEnum as FDF
 from ..utils.can_utils import CanMsgDir as DIR
 from ..utils.can_utils import CAN_ID_RANGE
-
 class CAN:
     def __init__(
                 self,
@@ -11,19 +10,19 @@ class CAN:
                 dlc,
                 data,
                 *,
+                fdf=FDF.CLASSIC_CAN.value,
                 dir=DIR.TRANSMIT.value,
                 brs=BRS.SET.value,
-                ide=IDE.STANDARD_ID.value,
-                fdf=FDF.CLASSIC_CAN.value 
+                ide=IDE.STANDARD_ID.value                 
             ):
         
         self.id = id
         self.dlc = dlc
         self.data = data
+        self.fdf = fdf
         self.dir = dir
         self.brs = brs
         self.ide = ide
-        self.fdf = fdf
 
     @property
     def id(self):
@@ -56,7 +55,6 @@ class CAN:
     @id.setter
     def id(self, id):
         
-        print(hex(id))
         if id < 0:
             raise ValueError("ID should be >0")
         

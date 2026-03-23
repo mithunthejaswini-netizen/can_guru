@@ -1,28 +1,33 @@
-from can.can import CAN
+from .can import CAN
 from ..utils.can_utils import CAN_FD_DLC_TABLE
 from ..utils.can_utils import FlexibleDataRateFormatEnum as FDF
 class CanFd(CAN):
-    
-    def __init__(self):
-        super().__init__()
-        
+                
     @CAN.dlc.setter
     def dlc(self, dlc):
         
         if dlc < 0 and dlc > 0xF:
-            ValueError("DLC should be > 0 and < F")
+            raise ValueError("DLC should be > 0 and < F")
+            
+        self._dlc = dlc 
 
-        can_tx_len = CAN_FD_DLC_TABLE[self._dlc]
+    @CAN.data.setter
+    def data(self, data):
         
-        if len(self._data) > can_tx_len:
-            self._data = self._data[can_tx_len]
+        can_tx_len = 0
+        
+        if self._dlc > 8:
+            can_tx_len = CAN_FD_DLC_TABLE[self._dlc]
+        else:
+            can_tx_len = self._dlc 
+            
+        self._data = data[:can_tx_len]
             
     @CAN.fdf.setter
     def fdf(self, fdf):
+
         if fdf in FDF:
             if fdf==FDF.CLASSIC_CAN.value:
                 raise ValueError('FDF cannot be zero for Flexible CAN')
             
-        self._fdf = fdf        
-        
-        
+        self._fdf = fdf
