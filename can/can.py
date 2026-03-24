@@ -11,9 +11,9 @@ class CAN:
                 data,
                 *,
                 fdf=FDF.CLASSIC_CAN.value,
+                ide=IDE.STANDARD_ID.value,
                 dir=DIR.TRANSMIT.value,
-                brs=BRS.SET.value,
-                ide=IDE.STANDARD_ID.value                 
+                brs=BRS.SET.value                 
             ):
         
         self.id = id
@@ -86,11 +86,21 @@ class CAN:
             
     @ide.setter
     def ide(self, ide):
+
         if ide in IDE:
-            self._ide = ide
+            
+            if self._id <= CAN_ID_RANGE.STD_ID_MAX.value and ide==0:
+                self._ide = ide
+            elif self._id <= CAN_ID_RANGE.EXT_ID_MAX.value and ide==1:
+                self._ide = ide
+            else:
+                raise ValueError('IDE and arbitration id should be within range')
+        else:
+            raise ValueError('IDE should be 0 or 1 i.e. standard or extended identifier')
             
     @brs.setter
     def brs(self, brs):
+        
         if brs in BRS:
             self._brs = brs
     

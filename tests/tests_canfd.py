@@ -77,9 +77,8 @@ def test_std_canfd_pos_tc_06():
 
 def test_std_canfd_neg_tc_07():
     
-    can_classic_frame = CanFd(0x7FFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1)
+    can_classic_frame = CanFd(0x7FFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1, ide=1)
     
-    can_classic_frame.ide = 1
     can_classic_frame.brs = 0
     
     assert can_classic_frame.id == 0x7FFF
@@ -90,21 +89,21 @@ def test_std_canfd_neg_tc_07():
         
 def test_std_canfd_neg_tc_08():
     
-    can_classic_frame = CanFd(0x1FFFFFFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1)
+    can_classic_frame = CanFd(0x1FFFFFFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1, ide=1)
     
-    can_classic_frame.ide = 1
     can_classic_frame.brs = 0
     
     assert can_classic_frame.id == 0x1FFFFFFF
     assert can_classic_frame.dlc == 1
     assert can_classic_frame.data == (0,)
     assert can_classic_frame.brs == 0
-    assert can_classic_frame.ide == 1
+    with pytest.raises(ValueError):
+        can_classic_frame.ide = 0
         
 def test_std_canfd_neg_tc_09():
     
     with pytest.raises(ValueError):
-        can_classic_frame = CanFd(0x3FFFFFFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1)
+        can_classic_frame = CanFd(0x3FFFFFFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1, ide=1)
     
         can_classic_frame.ide = 1
         can_classic_frame.brs = 0
@@ -130,9 +129,8 @@ def test_std_canfd_pos_tc_10():
         
 def test_std_canfd_pos_tc_11():
     
-    can_classic_frame = CanFd(0x8FFFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1)
+    can_classic_frame = CanFd(0x8FFFF, 1, (0, 1, 2, 3, 4, 5, 6), fdf=1, ide=1)
 
-    can_classic_frame.ide = 1
     can_classic_frame.brs = 0
         
     assert can_classic_frame.dlc == 1
@@ -140,4 +138,3 @@ def test_std_canfd_pos_tc_11():
     assert can_classic_frame.brs == 0
     assert can_classic_frame.ide == 1
     assert can_classic_frame.isExt() == True
-    
