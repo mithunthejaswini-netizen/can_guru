@@ -118,6 +118,16 @@ class CAN:
     def isExt(self):
         return self._id > CAN_ID_RANGE.STD_ID_MAX.value and \
             self._id <= CAN_ID_RANGE.EXT_ID_MAX.value
+            
+    def to_bytes(self):
+        
+        ide = self.ide.to_bytes(1, byteorder='big')
+        fdf = self.fdf.to_bytes(1, byteorder='big')
+        id  = self.id.to_bytes(4, byteorder='big')
+        dlc = self.dlc.to_bytes(1, byteorder='big')
+        data = bytes(self.data)
+        cdc_frame = ide + fdf + id + dlc + data
+        return cdc_frame
     
     def __str__(self):
     

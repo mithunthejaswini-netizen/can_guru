@@ -8,6 +8,11 @@ def test_std_can_pos_tc_01():
     assert can_classic_frame.dlc == 8
     assert can_classic_frame.data == (0, 1, 2, 3, 4, 5, 6, 7)
 
+    m = list(can_classic_frame.to_bytes())
+    k = ([hex(n) for n in m])
+    
+    assert k == ['0x0', '0x0', '0x0', '0x0', '0x0', '0x32', '0x8', '0x0', '0x1', '0x2', '0x3', '0x4', '0x5', '0x6', '0x7']
+    
 def test_std_can_pos_tc_02():
     
     can_classic_frame = CanClassic(0, 3, (0, 1, 2, 3, 4, 5, 6, 7))
